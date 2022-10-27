@@ -24,7 +24,7 @@ public class Main {
 			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/db2amtbis","root","root");
 			DatabaseMetaData dm=conn.getMetaData();
 			Statement st = conn.createStatement();
-				
+				System.out.println("skdnfks");
 			do {
 				System.out.println("Introduce opcion : ");
 				elec=sc.nextInt();
