@@ -25,6 +25,7 @@ public class Main {
 			DatabaseMetaData dm=conn.getMetaData();
 			Statement st = conn.createStatement();
 				System.out.println("skdnfks");
+				System.out.println("skdnfks");
 			do {
 				System.out.println("Introduce opcion : ");
 				elec=sc.nextInt();
