@@ -26,6 +26,7 @@ public class Main {
 			Statement st = conn.createStatement();
 				System.out.println("skdnfks");
 				System.out.println("skdnfks");
+				System.out.println("kdkdd");
 			do {
 				System.out.println("Introduce opcion : ");
 				elec=sc.nextInt();
