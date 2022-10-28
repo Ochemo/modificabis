@@ -28,9 +28,9 @@ public class Main {
 			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/db2amtbis","root","root");
 			DatabaseMetaData dm=conn.getMetaData();
 			Statement st = conn.createStatement();
-			
+			System.out.println("dd");
 			do {
-				System.out.println("Introduce opcion : ");
+				System.out.println("Introduce opcion : \n1.-Inserta alumno \n2.-Elimina Alumno \n3 Actualiza alumno \n4.-Muestra Alumno ");
 				elec=sc.nextInt();
 				switch(elec) {
 				case 1 :
