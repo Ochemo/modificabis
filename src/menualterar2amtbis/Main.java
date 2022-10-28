@@ -6,12 +6,16 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
 public class Main {
-	static String []camposAlumno= {"IDN","APENOM","DIRECC","PROV","EMAIL"};
+	static String []camposAlumno= {"IDN","APENOM","DIRECC","PROV","EMAIL","FECHA","HORA","MARCATIEMPO"};
 	public static void main(String[] args) throws SQLException {
 			
 			//creamos int para el menu
@@ -24,15 +28,14 @@ public class Main {
 			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/db2amtbis","root","root");
 			DatabaseMetaData dm=conn.getMetaData();
 			Statement st = conn.createStatement();
-				System.out.println("skdnfks");
-				System.out.println("skdnfks");
-				System.out.println("kdkdd");
+			
 			do {
 				System.out.println("Introduce opcion : ");
 				elec=sc.nextInt();
 				switch(elec) {
 				case 1 :
 					insertarAlumno(conn,st);
+					break;
 				case 2 :
 					eliminaAlumno(conn,st);
 					break;
@@ -55,9 +58,14 @@ public class Main {
 
 	}
 
-	private static void muestraAlumno(Connection con,Statement st) {
-		// TODO Auto-generated method stub
-		
+	private static void muestraAlumno(Connection con,Statement st) throws SQLException {
+		String dni;
+		dni = JOptionPane.showInputDialog("Introduce el dni del Alumno a mostrar  : ");
+		String ssql = "SELECT * FROM ALUMNOS WHERE idn = "+dni;
+		ResultSet rs = st.executeQuery(ssql);
+		while(rs.next()) {
+			System.out.printf("%1s  %32s  %32s    %16s   %1s\n", rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5));
+		}
 	}
 
 	private static void actualizaAlumno(Connection con,Statement st) throws SQLException {
@@ -65,6 +73,10 @@ public class Main {
 		String terminar = "salir";
 		String campo;
 		String nValor;
+		LocalDate DATE = LocalDate.now();
+		LocalTime TIME = LocalTime.now();
+		Long datetime = System.currentTimeMillis();
+		Timestamp TIMESTAMP= new Timestamp(datetime);
 		
 		do {
 			dni = JOptionPane.showInputDialog("Introduce el dni del Alumno a modificar  : ");
@@ -73,23 +85,37 @@ public class Main {
 			
 			switch(campo) {
 			case "dni":
-				dni= (JOptionPane.showInputDialog("Introduce el dni"));
-				st.executeQuery("UPDATE alumnos SET IDN=UPPER(PROV)");
+				st.executeQuery("UPDATE alumnos SET IDN='"+nValor+"'WHERE IDN ='"+dni+"'");
+				st.executeQuery("UPDATE alumnos SET FECHA='"+DATE+"'");
+				st.executeQuery("UPDATE alumnos SET HORA='"+TIME+"'");
+				st.executeQuery("UPDATE alumnos SET MARCATIEMPO='"+TIMESTAMP+"'");
 				break;
 			case "nombre":
-				st.executeQuery("UPDATE alumnos SET APENOM="+nValor);
+				st.executeQuery("UPDATE alumnos SET APENOM='"+nValor+"'WHERE IDN ='"+dni+"'");
+				st.executeQuery("UPDATE alumnos SET FECHA='"+DATE+"'");
+				st.executeQuery("UPDATE alumnos SET HORA='"+TIME+"'");
+				st.executeQuery("UPDATE alumnos SET MARCATIEMPO='"+TIMESTAMP+"'");
 				break;
 			case "direccion":
 				
-				st.executeQuery("UPDATE alumnos SET DIRECC="+nValor);
+				st.executeQuery("UPDATE alumnos SET DIRECC='"+nValor+"'WHERE IDN ='"+dni+"'");
+				st.executeQuery("UPDATE alumnos SET FECHA='"+DATE+"'");
+				st.executeQuery("UPDATE alumnos SET HORA='"+TIME+"'");
+				st.executeQuery("UPDATE alumnos SET MARCATIEMPO='"+TIMESTAMP+"'");
 				break;
 			case "provincia":
 				
-				st.executeQuery("UPDATE alumnos SET PROV="+nValor);
+				st.executeQuery("UPDATE alumnos SET PROV='"+nValor+"'WHERE IDN ='"+dni+"'");
+				st.executeQuery("UPDATE alumnos SET FECHA='"+DATE+"'");
+				st.executeQuery("UPDATE alumnos SET HORA='"+TIME+"'");
+				st.executeQuery("UPDATE alumnos SET MARCATIEMPO='"+TIMESTAMP+"'");
 				break;
 			case "email":
 				
-				st.executeQuery("UPDATE alumnos SET EMAIL="+nValor);
+				st.executeQuery("UPDATE alumnos SET EMAIL='"+nValor+"'WHERE IDN ='"+dni+"'");
+				st.executeQuery("UPDATE alumnos SET FECHA='"+DATE+"'");
+				st.executeQuery("UPDATE alumnos SET HORA='"+TIME+"'");
+				st.executeQuery("UPDATE alumnos SET MARCATIEMPO='"+TIMESTAMP+"'");
 				break;
 			case "salir":
 				System.out.println("adios");
@@ -99,7 +125,7 @@ public class Main {
 		}while(dni==terminar);
 		
 		
-		st.executeQuery("UPDATE alumnos SET PROV=UPPER(PROV)");
+		
 		
 	}
 
@@ -146,6 +172,10 @@ public class Main {
 		st = con.createStatement();
 		String ntabla,dni,apenom,dir,pro,ema;
 		String sentencia;
+		LocalDate DATE = LocalDate.now();
+		LocalTime TIME = LocalTime.now();
+		Long datetime = System.currentTimeMillis();
+		Timestamp TIMESTAMP= new Timestamp(datetime);
 		ntabla= JOptionPane.showInputDialog("Introduce la tabla sobre la cual realizar los cambios");
 		switch(ntabla) {
 		case "alumnos":
@@ -161,8 +191,8 @@ public class Main {
 			
 			ema= JOptionPane.showInputDialog("Introduce el email");
 			sentencia="INSERT INTO "+ntabla+" ("+camposAlumno[0]+","
-			+camposAlumno[1]+","+camposAlumno[2]+","+camposAlumno[3]+","+camposAlumno[4]+") VALUES "
-					+ "('"+dni+"','"+apenom+ "','"+dir+"','"+pro+"','"+ema+"')";
+			+camposAlumno[1]+","+camposAlumno[2]+","+camposAlumno[3]+","+camposAlumno[4]+","+camposAlumno[5]+","+camposAlumno[6]+","+camposAlumno[7]+") VALUES "
+					+ "('"+dni+"','"+apenom+ "','"+dir+"','"+pro+"','"+ema+"','"+DATE+"','"+TIME+"','"+TIMESTAMP+"')";
 			st.executeQuery(sentencia);
 			break;
 		}
